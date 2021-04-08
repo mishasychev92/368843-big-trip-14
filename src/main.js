@@ -30,7 +30,7 @@ const eventList = eventsContainer.querySelector('.trip-events__list');
 
 render(tripInfo, createTripCostTemplate(), 'beforeend');
 render(eventList, createNewEventTemplate(), 'beforeend');
-render(eventList, createEventEditTemplate(), 'beforeend');
+render(eventList, createEventEditTemplate(), 'afterbegin');
 
 for (let i = 0; i < TASK_COUNT; i++) {
   render(eventList, createEventTemplate(), 'beforeend');
