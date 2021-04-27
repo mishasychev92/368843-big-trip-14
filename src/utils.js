@@ -35,16 +35,12 @@ export const getTimeDuration = (fromDate, toDate) => {
   const difference = endDate.diff(startDate);
   const timeDuration = dayjs.duration(difference);
 
-  const minutes = timeDuration.minutes() > 9 ? `${timeDuration.minutes()}` : `0${timeDuration.minutes()}`;
-  const hours = timeDuration.hours() > 9 ? `${timeDuration.hours()}` : `0${timeDuration.hours()}`;
-  const days = timeDuration.days() > 9 ? `${timeDuration.days()}` : `0${timeDuration.days()}`;
-
   if (endDate.diff(startDate, 'minute') < 60) {
-    return `${minutes}M`;
+    return timeDuration.format('mm[M]');
   } else if (endDate.diff(startDate, 'hour') < 24) {
-    return `${hours}H ${minutes}M`;
+    return timeDuration.format('HH[H] mm[M]');
   } else {
-    return `${days}D ${hours}H ${minutes}M`;
+    return timeDuration.format('DD[D] HH[H] mm[M]');
   }
 };
 

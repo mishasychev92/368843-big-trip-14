@@ -6,15 +6,10 @@ import {createSortTemplate} from './view/sort.js';
 import {createEventsListTemplate} from './view/events-list.js';
 import {createEventEditTemplate} from './view/event-edit.js';
 import {createEventTemplate} from './view/event.js';
-import {generatePoint} from './mock/event-data.js';
+import {generatePoints} from './mock/event-data.js';
 import {generateFilter} from './mock/filters-data.js';
 
-const EVENT_COUNT = 20;
-
-const events = new Array(EVENT_COUNT)
-  .fill()
-  .map(generatePoint)
-  .sort((eventA, eventB) => eventA.fromDate - eventB.fromDate);
+const events = generatePoints().sort((eventA, eventB) => eventA.fromDate - eventB.fromDate);
 const filters = generateFilter(events);
 
 const render = (container, template, place) => {
@@ -38,6 +33,6 @@ const eventList = eventsContainer.querySelector('.trip-events__list');
 render(tripInfo, createTripCostTemplate(events), 'beforeend');
 render(eventList, createEventEditTemplate(events[0]), 'afterbegin');
 
-for (let i = 1; i < EVENT_COUNT; i++) {
+for (let i = 1; i < events.length; i++) {
   render(eventList, createEventTemplate(events[i]), 'beforeend');
 }

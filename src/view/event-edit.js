@@ -3,10 +3,10 @@ import {EVENT_TYPES} from '../const.js';
 import {formatDate, getRandomInteger} from '../utils.js';
 
 const createEventTypeTemplate = (currentType) => {
-  return EVENT_TYPES.map((type) => {
+  return Object.keys(EVENT_TYPES).map((type) => {
     return `<div class="event__type-item">
       <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${type === currentType ? 'checked' : ''}>
-      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
+      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${EVENT_TYPES[type]}</label>
     </div>`;
   }).join('');
 };

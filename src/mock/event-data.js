@@ -3,6 +3,8 @@ import {getRandomInteger, getRandomArrayElement, getRandomArray} from '../utils.
 import {EVENT_TYPES} from '../const.js';
 import {generateOffers} from './offers-data.js';
 
+const EVENT_COUNT = 20;
+
 const generateCity = () => {
   const cities = [
     'Chamonix',
@@ -54,7 +56,7 @@ const generateDestination = () => {
   };
 };
 
-export const generatePoint = () => {
+const generatePoint = () => {
   const fromDate = dayjs()
     .add(getRandomInteger(-2, 2), 'day')
     .add(getRandomInteger(1, 10), 'hour')
@@ -67,7 +69,7 @@ export const generatePoint = () => {
     .add(getRandomInteger(1, 59), 'minute')
     .toDate();
 
-  const type = getRandomArrayElement(EVENT_TYPES);
+  const type = getRandomArrayElement(Object.keys(EVENT_TYPES));
 
   return {
     destination: generateDestination(),
@@ -78,4 +80,10 @@ export const generatePoint = () => {
     offers: generateOffers(type),
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };
+};
+
+export const generatePoints = () => {
+  return new Array(EVENT_COUNT)
+    .fill()
+    .map(generatePoint);
 };
