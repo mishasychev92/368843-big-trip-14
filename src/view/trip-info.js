@@ -1,4 +1,4 @@
-import {formatDate} from '../utils.js';
+import {formatDate, createElement} from '../utils.js';
 
 const getTripTitle = (events) => {
   const uniqueCities = new Set(events.map(({destination}) => destination.name));
@@ -12,7 +12,7 @@ const getTripDates = (events) => {
   return `${formatDate(fromDate, 'MMM DD')}&nbsp;&mdash;&nbsp;${formatDate(fromDate, 'MMM') === formatDate(toDate, 'MMM') ? formatDate(toDate, 'DD') : formatDate(toDate, 'MMM DD')}`;
 };
 
-export const createTripInfoTemplate = (events) => {
+const createTripInfoTemplate = (events) => {
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${getTripTitle(events)}</h1>
@@ -20,3 +20,26 @@ export const createTripInfoTemplate = (events) => {
   </div>
   </section>`;
 };
+
+export default class TripInfo {
+  constructor(events) {
+    this._events = events;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripInfoTemplate(this._events);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

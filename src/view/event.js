@@ -1,4 +1,4 @@
-import {formatDate, getTimeDuration} from '../utils.js';
+import {formatDate, getTimeDuration, createElement} from '../utils.js';
 
 const createOffersTemplate = (offers) => {
   if (offers.length > 0) {
@@ -14,7 +14,7 @@ const createOffersTemplate = (offers) => {
   return '';
 };
 
-export const createEventTemplate = (event) => {
+const createEventTemplate = (event) => {
   const {destination, price, fromDate, toDate, type, offers, isFavorite} = event;
 
   return `<li class="trip-events__item">
@@ -51,3 +51,26 @@ export const createEventTemplate = (event) => {
   </div>
 </li>`;
 };
+
+export default class Event {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

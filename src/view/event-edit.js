@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {EVENT_TYPES} from '../const.js';
-import {formatDate, getRandomInteger} from '../utils.js';
+import {formatDate, getRandomInteger, createElement} from '../utils.js';
 
 const createEventTypeTemplate = (currentType) => {
   return Object.keys(EVENT_TYPES).map((type) => {
@@ -66,7 +66,7 @@ const createEventPicturesTemplate = (pictures) => {
   return '';
 };
 
-export const createEventEditTemplate = (event = {}) => {
+const createEventEditTemplate = (event = {}) => {
   const {
     destination = {
       name: '',
@@ -138,3 +138,26 @@ export const createEventEditTemplate = (event = {}) => {
   </form>
 </li>`;
 };
+
+export default class EventEdit {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventEditTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
