@@ -122,7 +122,10 @@ const createEventEditTemplate = (event = {}) => {
         <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
       </div>
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Cancel</button>
+      <button class="event__reset-btn" type="reset">Delete</button>
+      <button class="event__rollup-btn" type="button">
+        <span class="visually-hidden">Open event</span>
+      </button>
     </header>
 
     ${(destination.description).length > 0 || (destination.pictures).length > 0 || offers.length > 0 ? `<section class="event__details">
