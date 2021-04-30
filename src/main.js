@@ -42,6 +42,11 @@ const renderEvent = (eventList, event) => {
     }
   };
 
+  const closeEvent = () => {
+    replaceEditFormToEvent();
+    document.removeEventListener('keydown', onEscKeyDown);
+  };
+
   eventComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceEventToEditForm();
     document.addEventListener('keydown', onEscKeyDown);
@@ -49,13 +54,11 @@ const renderEvent = (eventList, event) => {
 
   eventEditComponent.getElement().querySelector('.event--edit').addEventListener('submit', (evt) => {
     evt.preventDefault();
-    replaceEditFormToEvent();
-    document.removeEventListener('keydown', onEscKeyDown);
+    closeEvent();
   });
 
   eventEditComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
-    replaceEditFormToEvent();
-    document.removeEventListener('keydown', onEscKeyDown);
+    closeEvent();
   });
 
   render(eventList, eventComponent.getElement(), RenderPosition.BEFOREEND);
