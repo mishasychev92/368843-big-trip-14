@@ -1,4 +1,4 @@
-import {getRandomArray} from '../utils.js';
+import {getRandomArray} from '../utils/common.js';
 
 const availableOffers = {
   'taxi': [
