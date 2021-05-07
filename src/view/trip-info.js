@@ -1,4 +1,5 @@
-import {formatDate, createElement} from '../utils.js';
+import {formatDate} from '../utils/event.js';
+import AbstractView from './abstract.js';
 
 const getTripTitle = (events) => {
   const uniqueCities = new Set(events.map(({destination}) => destination.name));
@@ -21,25 +22,13 @@ const createTripInfoTemplate = (events) => {
   </section>`;
 };
 
-export default class TripInfo {
+export default class TripInfo extends AbstractView {
   constructor(events) {
+    super();
     this._events = events;
-    this._element = null;
   }
 
   getTemplate() {
     return createTripInfoTemplate(this._events);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
