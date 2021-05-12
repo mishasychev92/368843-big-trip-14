@@ -59,10 +59,16 @@ export default class Event extends AbstractView {
     this._event = event;
 
     this._buttonClickHandler = this._buttonClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
     return createEventTemplate(this._event);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
   }
 
   _buttonClickHandler(evt) {
@@ -73,5 +79,10 @@ export default class Event extends AbstractView {
   setButtonClickHandler(callback) {
     this._callback.buttonClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._buttonClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
   }
 }

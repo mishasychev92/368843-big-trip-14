@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import {getRandomInteger, getRandomArrayElement, getRandomArray} from '../utils/common.js';
 import {EVENT_TYPES} from '../const.js';
 import {generateOffers} from './offers-data.js';
@@ -72,6 +73,7 @@ const generatePoint = () => {
   const type = getRandomArrayElement(Object.keys(EVENT_TYPES));
 
   return {
+    id: nanoid(),
     destination: generateDestination(),
     price: getRandomInteger(2, 160) * 10,
     fromDate,
