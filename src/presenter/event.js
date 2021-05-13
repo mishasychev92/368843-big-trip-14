@@ -7,7 +7,7 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
-export default class Event {
+export default class EventPresenter {
   constructor(eventsListComponent, changeData, changeMode) {
     this._eventsListComponent = eventsListComponent;
     this._changeData = changeData;
@@ -17,10 +17,9 @@ export default class Event {
     this._eventEditComponent = null;
     this._mode = Mode.DEFAULT;
 
-    this._handleButtonClick = this._handleButtonClick.bind(this);
+    this._handleRollupButtonClick = this._handleRollupButtonClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
-    this._handleRollupButtonClick = this._handleRollupButtonClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -33,7 +32,7 @@ export default class Event {
     this._eventComponent = new EventView(event);
     this._eventEditComponent = new EventEditView(event);
 
-    this._eventComponent.setButtonClickHandler(this._handleButtonClick);
+    this._eventComponent.setRollupButtonClickHandler(this._handleRollupButtonClick);
     this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._eventEditComponent.setRollupButtonClickHandler(this._handleRollupButtonClick);
@@ -45,12 +44,13 @@ export default class Event {
       return;
     }
 
-    if (this._mode === Mode.DEFAULT) {
-      replace(this._eventComponent, prevEventComponent);
-    }
-
-    if (this._mode === Mode.EDITING) {
-      replace(this._eventEditComponent, prevEventEditComponent);
+    switch (this._mode) {
+      case Mode.DEFAULT:
+        replace(this._eventComponent, prevEventComponent);
+        break;
+      case Mode.EDITING:
+        replace(this._eventEditComponent, prevEventEditComponent);
+        break;
     }
 
     remove(prevEventComponent);
@@ -88,10 +88,6 @@ export default class Event {
     }
   }
 
-  _handleButtonClick() {
-    this._replaceEventToEditForm();
-  }
-
   _handleFavoriteClick() {
     this._changeData(
       Object.assign(
@@ -110,6 +106,13 @@ export default class Event {
   }
 
   _handleRollupButtonClick() {
-    this._replaceEditFormToEvent();
+    switch (this._mode) {
+      case Mode.DEFAULT:
+        this._replaceEventToEditForm();
+        break;
+      case Mode.EDITING:
+        this._replaceEditFormToEvent();
+        break;
+    }
   }
 }

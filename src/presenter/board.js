@@ -5,9 +5,9 @@ import EventsListView from '../view/events-list.js';
 import NoEventsView from '../view/no-events.js';
 import EventPresenter from './event.js';
 import {updateItem} from '../utils/common.js';
-import {render, RenderPosition, remove} from '../utils/render.js';
+import {render, RenderPosition} from '../utils/render.js';
 
-export default class Board {
+export default class BoardPresenter {
   constructor(eventsContainer, tripInfoContainer) {
     this._eventsContainer = eventsContainer;
     this._tripInfoContainer = tripInfoContainer;
@@ -67,20 +67,6 @@ export default class Board {
     this._eventPresenter[event.id] = eventPresenter;
   }
 
-  _clearEventList() {
-    Object
-      .values(this._eventPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._taskPresenter = {};
-
-    remove(this._tripInfoComponent);
-    remove(this._tripCostComponent);
-    remove(this._sortComponent);
-    remove(this._eventsListComponent);
-
-    this._renderNoEvents();
-  }
-
   _renderEvents() {
     for (let i = 0; i < this._events.length; i++) {
       this._renderEvent(this._events[i]);
@@ -90,7 +76,6 @@ export default class Board {
   _renderBoard() {
     if (this._events.length === 0) {
       this._renderNoEvents();
-      return;
     } else {
       this._renderTripInfo();
       this._renderTripCost();
