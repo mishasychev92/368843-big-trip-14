@@ -29,7 +29,7 @@ export default class BoardPresenter {
 
   init(events) {
     this._events = events.slice();
-    this._sourcedEvents = events.slice();
+    this._sourceEvents = events.slice();
     this._renderBoard();
   }
 
@@ -51,20 +51,20 @@ export default class BoardPresenter {
 
   _handleEventChange(updatedEvent) {
     this._events = updateItem(this._events, updatedEvent);
-    this._sourcedEvents = updateItem(this._sourcedEvents, updatedEvent);
+    this._sourceEvents = updateItem(this._sourceEvents, updatedEvent);
     this._eventPresenter[updatedEvent.id].init(updatedEvent);
   }
 
   _sortEvents(sortType) {
     switch (sortType) {
       case SortType.TIME:
-        this._events.sort(sortEventsByTime);
+        this._events = this._sourceEvents.slice().sort(sortEventsByTime);
         break;
       case SortType.PRICE:
-        this._events.sort(sortEventsByPrice);
+        this._events = this._sourceEvents.slice().sort(sortEventsByPrice);
         break;
       default:
-        this._events = this._sourcedEvents.slice();
+        this._events = this._sourceEvents.slice();
         break;
     }
 
