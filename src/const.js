@@ -10,3 +10,9 @@ export const EVENT_TYPES = {
   'sightseeing': 'Sightseeing',
   'restaurant': 'Restaurant',
 };
+
+export const SortType = {
+  DAY: 'day',
+  TIME: 'time',
+  PRICE: 'price',
+};

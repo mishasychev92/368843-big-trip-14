@@ -4,8 +4,9 @@ import BoardPresenter from './presenter/board.js';
 import {generatePoints} from './mock/event-data.js';
 import {generateFilter} from './mock/filters-data.js';
 import {render, RenderPosition} from './utils/render.js';
+import {sortEventsByDate} from './utils/event.js';
 
-const events = generatePoints().sort((eventA, eventB) => eventA.fromDate - eventB.fromDate);
+const events = generatePoints().sort(sortEventsByDate);
 const filters = generateFilter(events);
 
 const siteMenuContainer = document.querySelector('.trip-controls__navigation');
