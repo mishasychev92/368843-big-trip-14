@@ -33,3 +33,52 @@ export const isDateInFuture = (date) => {
 export const isDateCurrent = (date) => {
   return dayjs().isSame(dayjs(date), 'm');
 };
+
+const getWeightForNullValue = (valueA, valueB) => {
+  if (valueA === null && valueB === null) {
+    return 0;
+  }
+
+  if (valueA === null) {
+    return 1;
+  }
+
+  if (valueB === null) {
+    return -1;
+  }
+
+  return null;
+};
+
+export const sortEventsByDate = (eventA, eventB) => {
+  const weight = getWeightForNullValue(eventA.fromDate, eventB.fromDate);
+
+  if (weight !== null) {
+    return weight;
+  }
+
+  return eventA.fromDate - eventB.fromDate;
+};
+
+export const sortEventsByTime = (eventA, eventB) => {
+  const durationOfEventA = dayjs(eventA.toDate).diff(dayjs(eventA.fromDate));
+  const durationOfEventB = dayjs(eventB.toDate).diff(dayjs(eventB.fromDate));
+
+  const weight = getWeightForNullValue(durationOfEventA, durationOfEventB);
+
+  if (weight !== null) {
+    return weight;
+  }
+
+  return durationOfEventB - durationOfEventA;
+};
+
+export const sortEventsByPrice = (eventA, eventB) => {
+  const weight = getWeightForNullValue(eventA.price, eventB.price);
+
+  if (weight !== null) {
+    return weight;
+  }
+
+  return eventB.price - eventA.price;
+};
