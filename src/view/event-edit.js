@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import {EVENT_TYPES, CITIES} from '../const.js';
 import {formatDate} from '../utils/event.js';
-import {getRandomInteger} from '../utils/common.js';
 import {generateDestination} from '../mock/event-data.js';
 import {generateOffers} from '../mock/offers-data.js';
 import SmartView from './smart.js';
@@ -35,7 +34,7 @@ const createEventOfferTemplate = (offers) => {
         const offerLastWord = offer.title.split(' ').pop();
 
         return `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerLastWord}-1" type="checkbox" name="event-offer-${offerLastWord}" ${getRandomInteger(0,1) ? 'checked' : ''}>
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerLastWord}-1" type="checkbox" name="event-offer-${offerLastWord}" ${offer.isChecked ? 'checked' : ''}>
           <label class="event__offer-label" for="event-offer-${offerLastWord}-1">
             <span class="event__offer-title">${offer.title}</span>
             &plus;&euro;&nbsp;
@@ -216,12 +215,8 @@ export default class EventEdit extends SmartView {
   }
 
   _setInnerHandlers() {
-    this.getElement()
-      .querySelector('.event__type-group')
-      .addEventListener('change', this._eventTypeToggleHandler);
-    this.getElement()
-      .querySelector('.event__input--destination')
-      .addEventListener('change', this._destinationToggleHandler);
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._eventTypeToggleHandler);
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._destinationToggleHandler);
   }
 
   setFormSubmitHandler(callback) {
