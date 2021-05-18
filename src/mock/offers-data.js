@@ -1,4 +1,4 @@
-import {getRandomArray} from '../utils/common.js';
+import {getRandomArray, getRandomInteger} from '../utils/common.js';
 
 const availableOffers = {
   'taxi': [
@@ -184,5 +184,11 @@ const availableOffers = {
 };
 
 export const generateOffers = (type) => {
-  return getRandomArray(availableOffers[type]);
+  const offers = getRandomArray(availableOffers[type]);
+
+  offers.map((offer) => {
+    offer.isChecked = Boolean(getRandomInteger(0, 1));
+  });
+
+  return offers;
 };

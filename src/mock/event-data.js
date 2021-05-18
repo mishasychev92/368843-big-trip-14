@@ -1,24 +1,13 @@
 import dayjs from 'dayjs';
 import {nanoid} from 'nanoid';
 import {getRandomInteger, getRandomArrayElement, getRandomArray} from '../utils/common.js';
-import {EVENT_TYPES} from '../const.js';
+import {EVENT_TYPES, CITIES} from '../const.js';
 import {generateOffers} from './offers-data.js';
 
 const EVENT_COUNT = 20;
 
 const generateCity = () => {
-  const cities = [
-    'Chamonix',
-    'Geneva',
-    'Amsterdam',
-    'London',
-    'Berlin',
-    'Prague',
-    'Helsinki',
-    'Paris',
-  ];
-
-  return getRandomArrayElement(cities);
+  return getRandomArrayElement(CITIES);
 };
 
 const generateDescription = () => {
@@ -49,9 +38,9 @@ const generatePictures = () => {
   return new Array(getRandomInteger(0, 5)).fill(null).map(getPicture);
 };
 
-const generateDestination = () => {
+export const generateDestination = (city = generateCity()) => {
   return {
-    name: generateCity(),
+    name: city,
     description: generateDescription(),
     pictures: generatePictures(),
   };
