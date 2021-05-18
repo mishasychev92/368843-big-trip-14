@@ -1,8 +1,23 @@
 import dayjs from 'dayjs';
-import {EVENT_TYPES} from '../const.js';
+import {EVENT_TYPES, CITIES} from '../const.js';
 import {formatDate} from '../utils/event.js';
 import {getRandomInteger} from '../utils/common.js';
-import AbstractView from './abstract.js';
+import {generateDestination} from '../mock/event-data.js';
+import {generateOffers} from '../mock/offers-data.js';
+import SmartView from './smart.js';
+
+const BLANK_EVENT = {
+  destination: {
+    name: '',
+    description: '',
+    pictures: [],
+  },
+  price: '',
+  fromDate: dayjs(),
+  toDate: dayjs(),
+  type: 'flight',
+  offers: [],
+};
 
 const createEventTypeTemplate = (currentType) => {
   return Object.keys(EVENT_TYPES).map((type) => {
@@ -41,6 +56,10 @@ const createEventOfferTemplate = (offers) => {
   return '';
 };
 
+const createDestinationTemplate = (cities) => {
+  return cities.map((city) => `<option value="${city}"></option>`).join('');
+};
+
 const createEventDescriptionTemplate = (description) => {
   if (description.length > 0) {
     return `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -68,19 +87,8 @@ const createEventPicturesTemplate = (pictures) => {
   return '';
 };
 
-const createEventEditTemplate = (event = {}) => {
-  const {
-    destination = {
-      name: '',
-      description: '',
-      pictures: [],
-    },
-    price = '',
-    fromDate = dayjs(),
-    toDate = dayjs(),
-    type = 'flight',
-    offers = [],
-  } = event;
+const createEventEditTemplate = (data) => {
+  const {destination, price, fromDate, toDate, type, offers, isDescriptionExist, isPicturesExist, isOffersExist} = data;
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -104,9 +112,7 @@ const createEventEditTemplate = (event = {}) => {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
         <datalist id="destination-list-1">
-          <option value="Amsterdam"></option>
-          <option value="Geneva"></option>
-          <option value="Chamonix"></option>
+          ${createDestinationTemplate(CITIES)}
         </datalist>
       </div>
       <div class="event__field-group  event__field-group--time">
@@ -130,10 +136,10 @@ const createEventEditTemplate = (event = {}) => {
       </button>
     </header>
 
-    ${(destination.description).length > 0 || (destination.pictures).length > 0 || offers.length > 0 ? `<section class="event__details">
+    ${isDescriptionExist || isPicturesExist || isOffersExist ? `<section class="event__details">
       ${createEventOfferTemplate(offers)}
       
-      ${(destination.description).length > 0 || (destination.pictures).length > 0 ? `<section class="event__section  event__section--destination">
+      ${isDescriptionExist || isPicturesExist ? `<section class="event__section  event__section--destination">
         ${createEventDescriptionTemplate(destination.description)}
         ${createEventPicturesTemplate(destination.pictures)}
       </section>` : ''}
@@ -144,27 +150,78 @@ const createEventEditTemplate = (event = {}) => {
 </li>`;
 };
 
-export default class EventEdit extends AbstractView {
-  constructor(event) {
+export default class EventEdit extends SmartView {
+  constructor(event = BLANK_EVENT) {
     super();
-    this._event = event;
+    this._data = EventEdit.parseEventToData(event);
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
+    this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
+    this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
+
+    this._setInnerHandlers();
+  }
+
+  reset(event) {
+    this.updateData(
+      EventEdit.parseEventToData(event),
+    );
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._event);
+    return createEventEditTemplate(this._data);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setRollupButtonClickHandler(this._callback.rollupButtonClick);
+  }
+
+  _eventTypeToggleHandler(evt) {
+    evt.preventDefault();
+
+    if (evt.target.tagName !== 'INPUT') {
+      return;
+    }
+
+    this.updateData({
+      type: evt.target.value,
+      offers: generateOffers(evt.target.value),
+    });
+  }
+
+  _destinationToggleHandler(evt) {
+    evt.preventDefault();
+
+    if (!CITIES.includes(evt.target.value)) {
+      return;
+    }
+
+    const destination = generateDestination(evt.target.value);
+    this.updateData({
+      destination,
+    });
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(this._event);
+    this._callback.formSubmit(EventEdit.parseDataToEvent(this._data));
   }
 
   _rollupButtonClickHandler(evt) {
     evt.preventDefault();
     this._callback.rollupButtonClick();
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelector('.event__type-group')
+      .addEventListener('change', this._eventTypeToggleHandler);
+    this.getElement()
+      .querySelector('.event__input--destination')
+      .addEventListener('change', this._destinationToggleHandler);
   }
 
   setFormSubmitHandler(callback) {
@@ -175,5 +232,30 @@ export default class EventEdit extends AbstractView {
   setRollupButtonClickHandler(callback) {
     this._callback.rollupButtonClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
+  }
+
+  static parseEventToData(event) {
+    return Object.assign(
+      {},
+      event,
+      {
+        isDescriptionExist: (event.destination.description).length > 0,
+        isPicturesExist: (event.destination.pictures).length > 0,
+        isOffersExist: (event.offers).length > 0,
+      },
+    );
+  }
+
+  static parseDataToEvent(data) {
+    data = Object.assign(
+      {},
+      data,
+    );
+
+    delete data.isDescriptionExist;
+    delete data.isPicturesExist;
+    delete data.isOffersExist;
+
+    return data;
   }
 }
