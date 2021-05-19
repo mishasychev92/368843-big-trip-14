@@ -71,6 +71,7 @@ export default class EventPresenter {
   _replaceEventToEditForm() {
     replace(this._eventEditComponent, this._eventComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
+    this._eventEditComponent.setDatepickers();
     this._changeMode();
     this._mode = Mode.EDITING;
   }
@@ -78,6 +79,7 @@ export default class EventPresenter {
   _replaceEditFormToEvent() {
     replace(this._eventComponent, this._eventEditComponent);
     document.removeEventListener('keydown', this._escKeyDownHandler);
+    this._eventEditComponent.removeDatepickers();
     this._mode = Mode.DEFAULT;
   }
 
