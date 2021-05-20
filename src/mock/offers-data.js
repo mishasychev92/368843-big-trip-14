@@ -1,6 +1,6 @@
-import {getRandomArray, getRandomInteger} from '../utils/common.js';
+import {getRandomArray} from '../utils/common.js';
 
-const availableOffers = {
+export const availableOffers = {
   'taxi': [
     {
       'title': 'Upgrade to a business class',
@@ -44,15 +44,6 @@ const availableOffers = {
     }, {
       'title': 'Choose the radio station',
       'price': 60,
-    }, {
-      'title': 'Add meal',
-      'price': 40,
-    }, {
-      'title': 'Switch to comfort',
-      'price': 55,
-    }, {
-      'title': 'Choose the radio statio',
-      'price': 30,
     },
   ],
   'ship': [
@@ -68,9 +59,6 @@ const availableOffers = {
     }, {
       'title': 'Switch to comfort',
       'price': 55,
-    }, {
-      'title': 'Choose the radio statio',
-      'price': 30,
     },
   ],
   'transport': [
@@ -127,42 +115,8 @@ const availableOffers = {
       'price': 30,
     },
   ],
-  'check-in': [
-    {
-      'title': 'Upgrade to a business class',
-      'price': 120,
-    }, {
-      'title': 'Choose the radio station',
-      'price': 60,
-    }, {
-      'title': 'Add meal',
-      'price': 40,
-    }, {
-      'title': 'Switch to comfort',
-      'price': 55,
-    }, {
-      'title': 'Choose the radio statio',
-      'price': 30,
-    },
-  ],
-  'sightseeing': [
-    {
-      'title': 'Upgrade to a business class',
-      'price': 120,
-    }, {
-      'title': 'Choose the radio station',
-      'price': 60,
-    }, {
-      'title': 'Add meal',
-      'price': 40,
-    }, {
-      'title': 'Switch to comfort',
-      'price': 55,
-    }, {
-      'title': 'Choose the radio statio',
-      'price': 30,
-    },
-  ],
+  'check-in': [],
+  'sightseeing': [],
   'restaurant': [
     {
       'title': 'Upgrade to a business class',
@@ -173,22 +127,10 @@ const availableOffers = {
     }, {
       'title': 'Add meal',
       'price': 40,
-    }, {
-      'title': 'Switch to comfort',
-      'price': 55,
-    }, {
-      'title': 'Choose the radio statio',
-      'price': 30,
     },
   ],
 };
 
 export const generateOffers = (type) => {
-  const offers = getRandomArray(availableOffers[type]);
-
-  offers.map((offer) => {
-    offer.isChecked = Boolean(getRandomInteger(0, 1));
-  });
-
-  return offers;
+  return getRandomArray(availableOffers[type]);
 };
