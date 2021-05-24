@@ -46,6 +46,18 @@ export const generateDestination = (city = generateCity()) => {
   };
 };
 
+const generateDestinations = () => {
+  return CITIES.map((city) => {
+    return {
+      name: city,
+      description: generateDescription(),
+      pictures: generatePictures(),
+    };
+  });
+};
+
+export const availableDestinations = generateDestinations();
+
 const generatePoint = () => {
   const fromDate = dayjs()
     .add(getRandomInteger(-2, 2), 'day')
@@ -63,7 +75,7 @@ const generatePoint = () => {
 
   return {
     id: nanoid(),
-    destination: generateDestination(),
+    destination: getRandomArrayElement(availableDestinations),
     price: getRandomInteger(2, 160) * 10,
     fromDate,
     toDate,
