@@ -1,6 +1,7 @@
 import EventView from '../view/event.js';
 import EventEditView from '../view/event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -8,10 +9,12 @@ const Mode = {
 };
 
 export default class EventPresenter {
-  constructor(eventsListComponent, changeData, changeMode) {
+  constructor(eventsListComponent, changeData, changeMode, offers, destinations) {
     this._eventsListComponent = eventsListComponent;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._offers = offers;
+    this._destinations = destinations;
 
     this._eventComponent = null;
     this._eventEditComponent = null;
@@ -19,6 +22,7 @@ export default class EventPresenter {
 
     this._handleRollupButtonClick = this._handleRollupButtonClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
@@ -30,12 +34,13 @@ export default class EventPresenter {
     const prevEventEditComponent = this._eventEditComponent;
 
     this._eventComponent = new EventView(event);
-    this._eventEditComponent = new EventEditView(event);
+    this._eventEditComponent = new EventEditView(event, this._offers, this._destinations);
 
     this._eventComponent.setRollupButtonClickHandler(this._handleRollupButtonClick);
     this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._eventEditComponent.setRollupButtonClickHandler(this._handleRollupButtonClick);
+    this._eventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     render(this._eventsListComponent, this._eventComponent, RenderPosition.BEFOREEND);
 
@@ -93,6 +98,8 @@ export default class EventPresenter {
 
   _handleFavoriteClick() {
     this._changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._event,
@@ -103,9 +110,27 @@ export default class EventPresenter {
     );
   }
 
-  _handleFormSubmit(event) {
-    this._changeData(event);
+  _handleFormSubmit(update) {
+    const isMinorUpdate =
+      !(this._event.fromDate === update.fromDate) ||
+      !(this._event.toDate === update.toDate) ||
+      !(this._event.price === update.price);
+
+    this._changeData(
+      UserAction.UPDATE_EVENT,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update,
+    );
+
     this._replaceEditFormToEvent();
+  }
+
+  _handleDeleteClick(event) {
+    this._changeData(
+      UserAction.DELETE_EVENT,
+      UpdateType.MINOR,
+      event,
+    );
   }
 
   _handleRollupButtonClick() {
