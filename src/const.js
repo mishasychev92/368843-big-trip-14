@@ -45,3 +45,9 @@ export const FilterType = {
   FUTURE: 'future',
   PAST: 'past',
 };
+
+export const MenuItem = {
+  TABLE: 'TABLE',
+  STATS: 'STATS',
+  NEW_EVENT: 'NEW_EVENT',
+};

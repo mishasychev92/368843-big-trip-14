@@ -17,14 +17,14 @@ export default class EventNewPresenter {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init(button) {
+  init(buttonNewEvent) {
     if (this._eventEditComponent !== null) {
       return;
     }
 
     this._eventEditComponent = new EventEditView(undefined, this._offers, this._destinations, true);
 
-    this._button = button;
+    this._buttonNewEvent = buttonNewEvent;
 
     this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._eventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
@@ -32,7 +32,7 @@ export default class EventNewPresenter {
 
     render(this._eventsListComponent, this._eventEditComponent, RenderPosition.AFTERBEGIN);
 
-    this._button.disabled = true;
+    this._buttonNewEvent.disabled = true;
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
 
@@ -44,7 +44,7 @@ export default class EventNewPresenter {
     remove(this._eventEditComponent);
     this._eventEditComponent = null;
 
-    this._button.disabled = false;
+    this._buttonNewEvent.disabled = false;
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 

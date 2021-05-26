@@ -299,13 +299,13 @@ export default class EventEdit extends SmartView {
   _startDateChangeHandler([userDate]) {
     this.updateData({
       fromDate: userDate,
-    }, true);
+    });
   }
 
   _endDateChangeHandler([userDate]) {
     this.updateData({
       toDate: userDate,
-    }, true);
+    });
   }
 
   setDatepickers() {

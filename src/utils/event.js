@@ -1,21 +1,24 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
 export const formatDate = (date, format) => {
   return dayjs(date).format(format);
 };
 
 export const getTimeDuration = (fromDate, toDate) => {
-  dayjs.extend(duration);
   const startDate = dayjs(fromDate);
   const endDate = dayjs(toDate);
 
-  const difference = endDate.diff(startDate);
+  return endDate.diff(startDate);
+};
+
+export const formateDuration = (difference) => {
   const timeDuration = dayjs.duration(difference);
 
-  if (endDate.diff(startDate, 'minute') < 60) {
+  if (timeDuration.asMinutes() < 60) {
     return timeDuration.format('mm[M]');
-  } else if (endDate.diff(startDate, 'hour') < 24) {
+  } else if (timeDuration.asHours() < 24) {
     return timeDuration.format('HH[H] mm[M]');
   } else {
     return timeDuration.format('DD[D] HH[H] mm[M]');
