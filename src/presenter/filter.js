@@ -18,7 +18,7 @@ export default class FilterPresenter {
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
-  init(isDisable) {
+  init({isDisable = false} = {}) {
     const filters = this._getFilters(isDisable);
     const prevFilterComponent = this._filterComponent;
 

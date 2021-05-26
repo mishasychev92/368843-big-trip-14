@@ -66,7 +66,7 @@ const handleSiteMenuClick = (menuItem) => {
       break;
     case MenuItem.STATS:
       boardPresenter.destroy();
-      filterPresenter.init(true);
+      filterPresenter.init({isDisable: true});
       statsComponent = new StatsView(eventsModel.getEvents());
       render(statsContainer, statsComponent, RenderPosition.BEFOREEND);
       siteMenuComponent.setMenuItem(MenuItem.STATS);

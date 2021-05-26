@@ -138,7 +138,7 @@ export default class BoardPresenter {
   }
 
   _renderTripInfo() {
-    if (this._tripInfoComponent !== null) {
+    if (this._tripInfoComponent) {
       remove(this._tripInfoComponent);
       this._tripInfoComponent = null;
     }
@@ -148,7 +148,7 @@ export default class BoardPresenter {
   }
 
   _renderTripCost() {
-    if (this._tripCostComponent !== null) {
+    if (this._tripCostComponent) {
       remove(this._tripCostComponent);
       this._tripCostComponent = null;
     }
@@ -158,7 +158,7 @@ export default class BoardPresenter {
   }
 
   _renderSort() {
-    if (this._sortComponent !== null) {
+    if (this._sortComponent) {
       this._sortComponent = null;
     }
 

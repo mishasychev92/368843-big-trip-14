@@ -1,7 +1,5 @@
 import dayjs from 'dayjs';
 
-export const makeItemsUniq = (items) => [...new Set(items)];
-
 export const countPriceByType = (events, type) => {
   const eventsOfType = events.filter((event) => event.type === type);
 

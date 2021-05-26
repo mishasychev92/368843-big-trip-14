@@ -1,15 +1,14 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart.js';
-import {makeItemsUniq, countPriceByType, getSortedData, countEventTypes, countDurationTypes} from '../utils/stats.js';
+import {EVENT_TYPES} from '../const.js';
+import {countPriceByType, getSortedData, countEventTypes, countDurationTypes} from '../utils/stats.js';
 import {formateDuration} from '../utils/event.js';
 
 const BAR_HEIGHT = 55;
 
 const renderMoneyChart = (moneyCtx, events) => {
-  const eventsType = events.map((events) => events.type);
-  const uniqueTypes = makeItemsUniq(eventsType);
-  const pricesByTypes = uniqueTypes.map((type) => countPriceByType(events, type));
+  const pricesByTypes = Object.keys(EVENT_TYPES).map((type) => countPriceByType(events, type));
   const sortedData = getSortedData(pricesByTypes);
 
   moneyCtx.height = BAR_HEIGHT * sortedData.labels.length;
@@ -81,9 +80,7 @@ const renderMoneyChart = (moneyCtx, events) => {
 };
 
 const renderTypeChart = (typeCtx, events) => {
-  const eventsType = events.map((events) => events.type);
-  const uniqueTypes = makeItemsUniq(eventsType);
-  const countOfType= uniqueTypes.map((type) => countEventTypes(events, type));
+  const countOfType= Object.keys(EVENT_TYPES).map((type) => countEventTypes(events, type));
   const sortedData = getSortedData(countOfType);
 
   typeCtx.height = BAR_HEIGHT * sortedData.labels.length;
@@ -155,9 +152,7 @@ const renderTypeChart = (typeCtx, events) => {
 };
 
 const renderTimeChart = (timeCtx, events) => {
-  const eventsType = events.map((events) => events.type);
-  const uniqueTypes = makeItemsUniq(eventsType);
-  const countOfType= uniqueTypes.map((type) => countDurationTypes(events, type));
+  const countOfType= Object.keys(EVENT_TYPES).map((type) => countDurationTypes(events, type));
   const sortedData = getSortedData(countOfType);
 
   timeCtx.height = BAR_HEIGHT * sortedData.labels.length;
@@ -275,7 +270,6 @@ export default class Stats extends SmartView {
 
   restoreHandlers() {
     this._setCharts();
-    this._setDatepicker();
   }
 
   _setCharts() {
