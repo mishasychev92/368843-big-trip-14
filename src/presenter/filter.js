@@ -18,8 +18,8 @@ export default class FilterPresenter {
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
-  init() {
-    const filters = this._getFilters();
+  init({isDisable = false} = {}) {
+    const filters = this._getFilters(isDisable);
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
@@ -46,8 +46,8 @@ export default class FilterPresenter {
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
-  _getFilters() {
-    const events = this._eventsModel.getEvents();
+  _getFilters(isDisable) {
+    const events = isDisable ? [] : this._eventsModel.getEvents();
 
     return [
       {
