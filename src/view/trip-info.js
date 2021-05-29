@@ -2,8 +2,13 @@ import {formatDate} from '../utils/event.js';
 import AbstractView from './abstract.js';
 
 const getTripTitle = (events) => {
-  const uniqueCities = new Set(events.map(({destination}) => destination.name));
-  return Array.from(uniqueCities).join(' &mdash; ');
+  const cities = events.map(({destination}) => destination.name);
+
+  if (cities.length > 3) {
+    return [cities.shift(), cities.pop()].join(' &mdash; ... &mdash; ');
+  }
+
+  return cities.join(' &mdash; ');
 };
 
 const getTripDates = (events) => {

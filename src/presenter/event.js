@@ -111,11 +111,9 @@ export default class EventPresenter {
   }
 
   _handleFormSubmit(update) {
-    const isPatchUpdate = this._event.type !== update.type;
-
     this._changeData(
       UserAction.UPDATE_EVENT,
-      isPatchUpdate ? UpdateType.PATCH : UpdateType.MINOR,
+      UpdateType.MINOR,
       update,
     );
 

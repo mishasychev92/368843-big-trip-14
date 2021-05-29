@@ -13,6 +13,10 @@ export const getTimeDuration = (fromDate, toDate) => {
   return endDate.diff(startDate);
 };
 
+export const getTypeOffers = (availableOffers, currentType) => {
+  return availableOffers.find(({type}) => type === currentType).offers;
+};
+
 export const formateDuration = (difference) => {
   const timeDuration = dayjs.duration(difference);
 

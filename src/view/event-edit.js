@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
 import {EVENT_TYPES} from '../const.js';
-import {formatDate} from '../utils/event.js';
+import {formatDate, getTypeOffers} from '../utils/event.js';
 import SmartView from './smart.js';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
@@ -28,18 +28,17 @@ const createEventTypeTemplate = (currentType) => {
   }).join('');
 };
 
-const createEventOfferTemplate = (currentType, offers, availableOffers) => {
-  const typeOffers = availableOffers[currentType];
-
+const createEventOfferTemplate = (currentType, offers, typeOffers) => {
   if (typeOffers.length > 0) {
+    let offerIndex = 0;
     const generateOffers = () => {
       return typeOffers.map(({title, price}) => {
-        const offerLastWord = title.split(' ').pop();
+        const offerLastWord = title.split(' ').pop() + '&ndash;' + offerIndex++;
         const isChecked = offers.some((offer) => offer.title === title) ? 'checked' : '';
 
         return `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerLastWord}-1" type="checkbox" name="event-offer-${offerLastWord}" ${isChecked}>
-          <label class="event__offer-label" for="event-offer-${offerLastWord}-1">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerLastWord}" type="checkbox" name="event-offer-${offerLastWord}" ${isChecked}>
+          <label class="event__offer-label" for="event-offer-${offerLastWord}">
             <span class="event__offer-title">${title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${price}</span>
@@ -93,6 +92,8 @@ const createEventPicturesTemplate = (pictures) => {
 const createEventEditTemplate = (data, availableOffers, availableDestinations, newEventMode) => {
   const {destination, price, fromDate, toDate, type, offers} = data;
 
+  const typeOffers = getTypeOffers(availableOffers, type);
+
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -139,8 +140,8 @@ const createEventEditTemplate = (data, availableOffers, availableDestinations, n
       </button>` : ''}
     </header>
 
-    ${(destination.description).length > 0 || (destination.pictures).length > 0 || availableOffers[type].length > 0 ? `<section class="event__details">
-      ${createEventOfferTemplate(type, offers, availableOffers)}
+    ${(destination.description).length > 0 || (destination.pictures).length > 0 || typeOffers.length > 0 ? `<section class="event__details">
+      ${createEventOfferTemplate(type, offers, typeOffers)}
       
       ${(destination.description).length > 0 || (destination.pictures).length > 0 ? `<section class="event__section  event__section--destination">
         ${createEventDescriptionTemplate(destination.description)}
@@ -252,7 +253,9 @@ export default class EventEdit extends SmartView {
       const checkedOffer = this._data.offers.find((offer) => offer.title === offerTitle);
       offers = offers.filter((offer) => offer !== checkedOffer);
     } else {
-      const checkedOffer = this._offers[this._data.type].find((offer) => offer.title === offerTitle);
+      const typeOffers = getTypeOffers(this._offers, this._data.type);
+      const checkedOffer = typeOffers.find(({title}) => title === offerTitle);
+
       offers.push(checkedOffer);
     }
 
@@ -322,7 +325,7 @@ export default class EventEdit extends SmartView {
         maxDate: this._data.toDate,
         enableTime: true,
         time_24hr: true,
-        onClose: this._startDateChangeHandler,
+        onChange: this._startDateChangeHandler,
       },
     );
 
@@ -339,7 +342,7 @@ export default class EventEdit extends SmartView {
         minDate: this._data.fromDate,
         enableTime: true,
         time_24hr: true,
-        onClose: this._endDateChangeHandler,
+        onChange: this._endDateChangeHandler,
       },
     );
   }
