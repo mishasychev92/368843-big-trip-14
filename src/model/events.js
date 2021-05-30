@@ -61,7 +61,6 @@ export default class EventsModel extends Observer {
       {},
       event,
       {
-        id: parseInt(event.id),
         price: event.base_price,
         fromDate: event.date_from !== null ? new Date(event.date_from) : event.date_from,
         toDate: event.date_to !== null ? new Date(event.date_to) : event.date_to,
@@ -82,11 +81,10 @@ export default class EventsModel extends Observer {
       {},
       event,
       {
-        'id': event.id.toString(),
         'base_price': event.price,
         'date_from': event.fromDate instanceof Date ? event.fromDate.toISOString() : null,
         'date_to': event.toDate instanceof Date ? event.toDate.toISOString() : null,
-        'is_favorite': event.isFavorite,
+        'is_favorite': event.isFavorite ? event.isFavorite : false,
       },
     );
 
