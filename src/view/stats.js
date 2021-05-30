@@ -1,14 +1,14 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart.js';
-import {EVENT_TYPES} from '../const.js';
+import {EventTypes} from '../const.js';
 import {countPriceByType, getSortedData, countEventTypes, countDurationTypes} from '../utils/stats.js';
 import {formateDuration} from '../utils/event.js';
 
 const BAR_HEIGHT = 55;
 
 const renderMoneyChart = (moneyCtx, events) => {
-  const pricesByTypes = Object.keys(EVENT_TYPES).map((type) => countPriceByType(events, type));
+  const pricesByTypes = Object.keys(EventTypes).map((type) => countPriceByType(events, type));
   const sortedData = getSortedData(pricesByTypes);
 
   moneyCtx.height = BAR_HEIGHT * sortedData.labels.length;
@@ -80,7 +80,7 @@ const renderMoneyChart = (moneyCtx, events) => {
 };
 
 const renderTypeChart = (typeCtx, events) => {
-  const countOfType= Object.keys(EVENT_TYPES).map((type) => countEventTypes(events, type));
+  const countOfType= Object.keys(EventTypes).map((type) => countEventTypes(events, type));
   const sortedData = getSortedData(countOfType);
 
   typeCtx.height = BAR_HEIGHT * sortedData.labels.length;
@@ -152,7 +152,7 @@ const renderTypeChart = (typeCtx, events) => {
 };
 
 const renderTimeChart = (timeCtx, events) => {
-  const countOfType= Object.keys(EVENT_TYPES).map((type) => countDurationTypes(events, type));
+  const countOfType= Object.keys(EventTypes).map((type) => countDurationTypes(events, type));
   const sortedData = getSortedData(countOfType);
 
   timeCtx.height = BAR_HEIGHT * sortedData.labels.length;

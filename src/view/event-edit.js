@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
-import {EVENT_TYPES} from '../const.js';
+import {EventTypes} from '../const.js';
 import {formatDate, getTypeOffers} from '../utils/event.js';
 import SmartView from './smart.js';
 
@@ -20,10 +20,10 @@ const BLANK_EVENT = {
 };
 
 const createEventTypeTemplate = (currentType, isDisabled) => {
-  return Object.keys(EVENT_TYPES).map((type) => {
+  return Object.keys(EventTypes).map((type) => {
     return `<div class="event__type-item">
       <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${type === currentType ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
-      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${EVENT_TYPES[type]}</label>
+      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${EventTypes[type]}</label>
     </div>`;
   }).join('');
 };
