@@ -11,17 +11,6 @@ export const EVENT_TYPES = {
   'restaurant': 'Restaurant',
 };
 
-export const CITIES = [
-  'Chamonix',
-  'Geneva',
-  'Amsterdam',
-  'London',
-  'Berlin',
-  'Prague',
-  'Helsinki',
-  'Paris',
-];
-
 export const SortType = {
   DAY: 'day',
   TIME: 'time',

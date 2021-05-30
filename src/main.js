@@ -7,7 +7,7 @@ import FilterModel from './model/filter.js';
 import OffersModel from './model/offers.js';
 import DestinationsModel from './model/destinations.js';
 import {render, RenderPosition, remove} from './utils/render.js';
-import {MenuItem, UpdateType} from './const.js';
+import {MenuItem, UpdateType, FilterType} from './const.js';
 import Api from './api.js';
 
 const AUTHORIZATION = 'Basic dsdSdsadSdsdDsddD';
@@ -49,7 +49,7 @@ const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
       boardPresenter.init();
-      filterPresenter.init();
+      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       remove(statsComponent);
       siteMenuComponent.setMenuItem(MenuItem.TABLE);
       bodyContainers.forEach((container) => container.classList.remove('page-body__container--line-hidden'));
