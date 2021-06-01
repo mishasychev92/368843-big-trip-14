@@ -72,6 +72,7 @@ export default class EventPresenter {
   destroy() {
     remove(this._eventComponent);
     remove(this._eventEditComponent);
+    document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
   resetView() {

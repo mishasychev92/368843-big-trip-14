@@ -22,11 +22,13 @@ export const formateDuration = (difference) => {
 
   if (timeDuration.asMinutes() < 60) {
     return timeDuration.format('mm[M]');
-  } else if (timeDuration.asHours() < 24) {
-    return timeDuration.format('HH[H] mm[M]');
-  } else {
-    return timeDuration.format('DD[D] HH[H] mm[M]');
   }
+
+  if (timeDuration.asHours() < 24) {
+    return timeDuration.format('HH[H] mm[M]');
+  }
+
+  return timeDuration.format('DD[D] HH[H] mm[M]');
 };
 
 export const isDateExpired = (date) => {
@@ -65,6 +67,16 @@ export const sortEventsByDate = (eventA, eventB) => {
   }
 
   return eventA.fromDate - eventB.fromDate;
+};
+
+export const sortEventsByToDate = (eventA, eventB) => {
+  const weight = getWeightForNullValue(eventA.toDate, eventB.toDate);
+
+  if (weight !== null) {
+    return weight;
+  }
+
+  return eventA.toDate - eventB.toDate;
 };
 
 export const sortEventsByTime = (eventA, eventB) => {

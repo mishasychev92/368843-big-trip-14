@@ -1,4 +1,4 @@
-import {formatDate} from '../utils/event.js';
+import {formatDate, sortEventsByToDate} from '../utils/event.js';
 import AbstractView from './abstract.js';
 
 const getTripTitle = (events) => {
@@ -13,7 +13,7 @@ const getTripTitle = (events) => {
 
 const getTripDates = (events) => {
   const fromDate = events[0].fromDate;
-  const toDate = events[events.length - 1].toDate;
+  const toDate = events.sort(sortEventsByToDate)[events.length - 1].toDate;
 
   return `${formatDate(fromDate, 'MMM DD')}&nbsp;&mdash;&nbsp;${formatDate(fromDate, 'MMM') === formatDate(toDate, 'MMM') ? formatDate(toDate, 'DD') : formatDate(toDate, 'MMM DD')}`;
 };

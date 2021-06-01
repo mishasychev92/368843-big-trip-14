@@ -14,7 +14,7 @@ const BLANK_EVENT = {
   },
   price: 0,
   fromDate: dayjs().toDate(),
-  toDate: dayjs().toDate(),
+  toDate: dayjs().add(1, 'hour').toDate(),
   type: 'flight',
   offers: [],
 };

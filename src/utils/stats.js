@@ -1,11 +1,9 @@
 import dayjs from 'dayjs';
 
 export const countPriceByType = (events, type) => {
-  const eventsOfType = events.filter((event) => event.type === type);
-
   return {
     label: type.toUpperCase(),
-    data: eventsOfType.reduce((accumulator, event) => accumulator + event.price, 0),
+    data: events.reduce((accumulator, event) => event.type === type ? accumulator + event.price : accumulator, 0),
   };
 };
 
@@ -17,16 +15,15 @@ export const countEventTypes = (events, type) => {
 };
 
 export const countDurationTypes = (events, type) => {
-
-  const eventsOfType = events.filter((event) => event.type === type);
-
   let typeDuration = 0;
 
-  eventsOfType.forEach((event) => {
-    const startDate = dayjs(event.fromDate);
-    const endDate = dayjs(event.toDate);
+  events.forEach((event) => {
+    if (event.type === type) {
+      const startDate = dayjs(event.fromDate);
+      const endDate = dayjs(event.toDate);
 
-    typeDuration += endDate.diff(startDate);
+      typeDuration += endDate.diff(startDate);
+    }
   });
 
   return {

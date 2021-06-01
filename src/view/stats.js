@@ -7,85 +7,24 @@ import {formateDuration} from '../utils/event.js';
 
 const BAR_HEIGHT = 55;
 
-const renderMoneyChart = (moneyCtx, events) => {
-  const pricesByTypes = Object.keys(EventTypes).map((type) => countPriceByType(events, type));
-  const sortedData = getSortedData(pricesByTypes);
+const eventTypes = Object.keys(EventTypes);
 
-  moneyCtx.height = BAR_HEIGHT * sortedData.labels.length;
-
-  return new Chart(moneyCtx, {
-    plugins: [ChartDataLabels],
-    type: 'horizontalBar',
-    data: {
-      labels: sortedData.labels,
-      datasets: [{
-        data: sortedData.data,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
-        barThickness: 44,
-        minBarLength: 50,
-      }],
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13,
-          },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
-          formatter: (val) => `€ ${val}`,
-        },
-      },
-      title: {
-        display: true,
-        text: 'MONEY',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-        }],
-      },
-      legend: {
-        display: false,
-      },
-      tooltips: {
-        enabled: false,
-      },
-    },
-  });
+const StatsTitle = {
+  MONEY: 'MONEY',
+  TYPE: 'TYPE',
+  TIME: 'TIME-SPENT',
 };
 
-const renderTypeChart = (typeCtx, events) => {
-  const countOfType= Object.keys(EventTypes).map((type) => countEventTypes(events, type));
-  const sortedData = getSortedData(countOfType);
+const formatMoneyLabel = (val) => `€ ${val}`;
+const formatTypeLabel = (val) => `${val}x`;
+const formatTimeLabel = (val) => formateDuration(val);
 
-  typeCtx.height = BAR_HEIGHT * sortedData.labels.length;
+const renderChart = (ctx, valuesByType, labelFormatter, chartTitle) => {
+  const sortedData = getSortedData(valuesByType);
 
-  return new Chart(typeCtx, {
+  ctx.height = BAR_HEIGHT * sortedData.labels.length;
+
+  return new Chart(ctx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
@@ -108,84 +47,12 @@ const renderTypeChart = (typeCtx, events) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          formatter: (val) => `${val}x`,
+          formatter: labelFormatter,
         },
       },
       title: {
         display: true,
-        text: 'TYPE',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-        }],
-      },
-      legend: {
-        display: false,
-      },
-      tooltips: {
-        enabled: false,
-      },
-    },
-  });
-};
-
-const renderTimeChart = (timeCtx, events) => {
-  const countOfType= Object.keys(EventTypes).map((type) => countDurationTypes(events, type));
-  const sortedData = getSortedData(countOfType);
-
-  timeCtx.height = BAR_HEIGHT * sortedData.labels.length;
-
-  return new Chart(timeCtx, {
-    plugins: [ChartDataLabels],
-    type: 'horizontalBar',
-    data: {
-      labels: sortedData.labels,
-      datasets: [{
-        data: sortedData.data,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
-        barThickness: 44,
-        minBarLength: 50,
-      }],
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13,
-          },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
-          formatter: (val) => formateDuration(val),
-        },
-      },
-      title: {
-        display: true,
-        text: 'TIME-SPEND',
+        text: chartTitle,
         fontColor: '#000000',
         fontSize: 23,
         position: 'left',
@@ -283,8 +150,12 @@ export default class Stats extends SmartView {
     const typeCtx = this.getElement().querySelector('.statistics__chart--transport');
     const timeCtx = this.getElement().querySelector('.statistics__chart--time');
 
-    this._moneyChart = renderMoneyChart(moneyCtx, this._data);
-    this._typeChart = renderTypeChart(typeCtx, this._data);
-    this._timeChart = renderTimeChart(timeCtx, this._data);
+    const pricesByTypes = eventTypes.map((type) => countPriceByType(this._data, type));
+    const countOfType= eventTypes.map((type) => countEventTypes(this._data, type));
+    const durationsByTypes = eventTypes.map((type) => countDurationTypes(this._data, type));
+
+    this._moneyChart = renderChart(moneyCtx, pricesByTypes, formatMoneyLabel, StatsTitle.MONEY);
+    this._typeChart = renderChart(typeCtx, countOfType, formatTypeLabel, StatsTitle.TYPE);
+    this._timeChart = renderChart(timeCtx, durationsByTypes, formatTimeLabel, StatsTitle.TIME);
   }
 }

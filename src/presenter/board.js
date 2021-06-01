@@ -40,7 +40,7 @@ export default class BoardPresenter {
   }
 
   init() {
-    this._buttonNewEvent.disabled = false;
+    this._setButtonNewEventEnabled();
 
     this._renderBoard();
 
@@ -49,7 +49,7 @@ export default class BoardPresenter {
   }
 
   destroy() {
-    this._buttonNewEvent.disabled = true;
+    this._setButtonNewEventDisabled();
 
     this._clearBoard({resetSortType: true});
 
@@ -60,7 +60,7 @@ export default class BoardPresenter {
   }
 
   createEvent() {
-    this._buttonNewEvent.disabled = true;
+    this._setButtonNewEventDisabled();
 
     this._currentSortType = SortType.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
@@ -167,6 +167,14 @@ export default class BoardPresenter {
     }
   }
 
+  _setButtonNewEventDisabled() {
+    this._buttonNewEvent.disabled = true;
+  }
+
+  _setButtonNewEventEnabled() {
+    this._buttonNewEvent.disabled = false;
+  }
+
   _renderTripInfo() {
     if (this._tripInfoComponent) {
       remove(this._tripInfoComponent);
@@ -220,9 +228,7 @@ export default class BoardPresenter {
   _renderEvents() {
     const events = this._getEvents();
 
-    for (let i = 0; i < events.length; i++) {
-      this._renderEvent(events[i]);
-    }
+    events.forEach((event) => this._renderEvent(event));
   }
 
   _clearBoard({resetSortType = false} = {}) {
@@ -243,15 +249,19 @@ export default class BoardPresenter {
 
   _renderBoard() {
     if (this._isLoading) {
-      this._buttonNewEvent.disabled = true;
+      this._setButtonNewEventDisabled();
       this._renderLoading();
       return;
     }
 
     if (this._getEvents().length === 0) {
+      remove(this._tripInfoComponent);
+
+      this._setButtonNewEventEnabled();
+      this._renderEventList();
       this._renderNoEvents();
     } else {
-      this._buttonNewEvent.disabled = false;
+      this._setButtonNewEventEnabled();
 
       remove(this._noEventsComponent);
 

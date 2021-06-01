@@ -10,7 +10,7 @@ import {render, RenderPosition, remove} from './utils/render.js';
 import {MenuItem, UpdateType, FilterType} from './const.js';
 import Api from './api.js';
 
-const AUTHORIZATION = 'Basic dsdSdsadSdsdDsddD';
+const AUTHORIZATION = 'Basic dsdSdsadSdsdDsddY';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 
 const api = new Api(END_POINT, AUTHORIZATION);
@@ -33,7 +33,7 @@ const filterPresenter = new FilterPresenter(filtersContainer, filterModel, event
 
 const siteMenuComponent = new SiteMenuView();
 
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+buttonNewEvent.addEventListener('click', (evt) => {
   evt.preventDefault();
 
   remove(statsComponent);
