@@ -150,9 +150,15 @@ export default class Stats extends SmartView {
     const typeCtx = this.getElement().querySelector('.statistics__chart--transport');
     const timeCtx = this.getElement().querySelector('.statistics__chart--time');
 
-    const pricesByTypes = eventTypes.map((type) => countPriceByType(this._data, type));
-    const countOfType= eventTypes.map((type) => countEventTypes(this._data, type));
-    const durationsByTypes = eventTypes.map((type) => countDurationTypes(this._data, type));
+    const pricesByTypes = [];
+    const countOfType = [];
+    const durationsByTypes = [];
+
+    for (const type of eventTypes) {
+      pricesByTypes.push(countPriceByType(this._data, type));
+      countOfType.push(countEventTypes(this._data, type));
+      durationsByTypes.push(countDurationTypes(this._data, type));
+    }
 
     this._moneyChart = renderChart(moneyCtx, pricesByTypes, formatMoneyLabel, StatsTitle.MONEY);
     this._typeChart = renderChart(typeCtx, countOfType, formatTypeLabel, StatsTitle.TYPE);
